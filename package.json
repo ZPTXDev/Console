@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  },
+  "name": "console-bot",
+  "version": "0.1.0",
+  "description": "discord bot",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZapSquared/Console.git"
+  },
+  "author": "zapteryx",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ZapSquared/Console/issues"
+  },
+  "homepage": "https://github.com/ZapSquared/Console#readme"
+}
