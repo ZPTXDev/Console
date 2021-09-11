@@ -19,14 +19,16 @@ client.on('interactionCreate', async interaction => {
 				const msg = await interaction.reply({
 					embeds: [
 						new MessageEmbed()
-							.setDescription('Pong! Calculating latency...'),
+							.setDescription('Pong! Calculating latency...')
+							.setColor('BLURPLE'),
 					],
 					fetchReply: true,
 				});
 				await interaction.editReply({
 					embeds: [
 						new MessageEmbed()
-							.setDescription(`Pong! Latency: ${msg.createdTimestamp - interaction.createdTimestamp}ms (API: ${client.ws.ping}ms)`),
+							.setDescription(`Pong! Latency: ${msg.createdTimestamp - interaction.createdTimestamp}ms (API: ${client.ws.ping}ms)`)
+							.setColor('BLURPLE'),
 					],
 				});
 				break;
