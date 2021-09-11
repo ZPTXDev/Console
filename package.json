@@ -14,6 +14,8 @@
   "description": "discord bot",
   "main": "main.js",
   "scripts": {
+    "deploy": "node deploy-commands.js",
+    "deployandrun": "node deploy-commands.js && node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
