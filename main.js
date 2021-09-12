@@ -91,7 +91,6 @@ client.on('interactionCreate', async interaction => {
 						menus.MENU,
 					],
 					components: [menus.MENU_CATEGORY],
-					ephemeral: true,
 				});
 				break;
 			}
