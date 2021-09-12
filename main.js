@@ -85,7 +85,7 @@ client.on('interactionCreate', async interaction => {
 		const { customId } = interaction;
 
 		switch (customId) {
-			case 'menu': {
+			case 'menu_back': {
 				await interaction.update({
 					embeds: [
 						menus.MENU,

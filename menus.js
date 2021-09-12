@@ -31,7 +31,7 @@ module.exports = {
 	MENU_BACK: new MessageActionRow()
 		.addComponents(
 			new MessageButton()
-				.setCustomId('menu')
+				.setCustomId('menu_back')
 				.setLabel('Back')
 				.setStyle('PRIMARY'),
 		),
