@@ -72,7 +72,7 @@ client.on('interactionCreate', async interaction => {
 	else if (interaction.isButton()) {
 		// button stuff here
 	}
-	else if (interaction.isContextMenu()) {
+	else if (interaction.isSelectMenu()) {
 		// context menu stuff here
 	}
 });
