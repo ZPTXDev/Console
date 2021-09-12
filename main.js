@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
+const { Client, Intents, MessageEmbed, VoiceChannel, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { token } = require('./config.json');
 const fetch = require('node-fetch');
 
@@ -62,6 +62,42 @@ client.on('interactionCreate', async interaction => {
 							.setDescription(`Your invite link is https://discord.com/invite/${invite.code}`)
 							.setColor('BLURPLE'),
 					],
+				});
+				break;
+			}
+			case 'menu': {
+				const row = new MessageActionRow()
+					.addComponents(
+						new MessageSelectMenu()
+							.setCustomId('category')
+							.setPlaceholder('Pick a category')
+							.addOptions([
+								{
+									label: 'Profile',
+									description: 'View your profile',
+									value: 'profile',
+								},
+								{
+									label: 'Job',
+									description: 'View your job details',
+									value: 'job',
+								},
+								{
+									label: 'Bank',
+									description: 'View your bank details',
+									value: 'bank',
+								},
+							]),
+					);
+				await interaction.reply({
+					embeds: [
+						new MessageEmbed()
+							.setTitle('Interaction Menu')
+							.setDescription('Choose an option below to continue.')
+							.setColor('BLURPLE'),
+					],
+					components: [row],
+					ephemeral: true,
 				});
 				break;
 			}
