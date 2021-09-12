@@ -1,6 +1,8 @@
 // Require the necessary discord.js classes
-const { Client, Intents, MessageEmbed, VoiceChannel, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const { token } = require('./config.json');
+const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
+const { token, managerIds } = require('./config.json');
+const emojis = require('./emojis.js');
+const menus = require('./menus.js');
 const fetch = require('node-fetch');
 
 // Create a new client instance
@@ -66,37 +68,11 @@ client.on('interactionCreate', async interaction => {
 				break;
 			}
 			case 'menu': {
-				const row = new MessageActionRow()
-					.addComponents(
-						new MessageSelectMenu()
-							.setCustomId('category')
-							.setPlaceholder('Pick a category')
-							.addOptions([
-								{
-									label: 'Profile',
-									description: 'View your profile',
-									value: 'profile',
-								},
-								{
-									label: 'Job',
-									description: 'View your job details',
-									value: 'job',
-								},
-								{
-									label: 'Bank',
-									description: 'View your bank details',
-									value: 'bank',
-								},
-							]),
-					);
 				await interaction.reply({
 					embeds: [
-						new MessageEmbed()
-							.setTitle('Interaction Menu')
-							.setDescription('Choose an option below to continue.')
-							.setColor('BLURPLE'),
+						menus.MENU,
 					],
-					components: [row],
+					components: [menus.MENU_CATEGORY],
 					ephemeral: true,
 				});
 				break;
@@ -106,10 +82,70 @@ client.on('interactionCreate', async interaction => {
 		}
 	}
 	else if (interaction.isButton()) {
-		// button stuff here
+		const { customId } = interaction;
+
+		switch (customId) {
+			case 'menu': {
+				await interaction.update({
+					embeds: [
+						menus.MENU,
+					],
+					components: [menus.MENU_CATEGORY],
+					ephemeral: true,
+				});
+				break;
+			}
+		}
 	}
 	else if (interaction.isSelectMenu()) {
-		// context menu stuff here
+		const { customId } = interaction;
+
+		switch (customId) {
+			case 'menu_category': {
+				const { user } = interaction;
+
+				switch (interaction.values[0]) {
+					case 'profile': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Profile')
+									.setDescription(`**${user.tag}**${managerIds.includes(user.id) ? ` <:verified:${emojis.VERIFIED}>` : ''}`)
+									.setThumbnail(user.avatarURL)
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+					case 'job': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Job')
+									.setDescription('You\'re unemployed.')
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+					case 'bank': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Bank')
+									.setDescription('You\'re broke.')
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+				}
+				break;
+			}
+		}
 	}
 });
 
