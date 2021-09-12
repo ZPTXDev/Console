@@ -1,6 +1,8 @@
 // Require the necessary discord.js classes
 const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
-const { token } = require('./config.json');
+const { token, managerIds } = require('./config.json');
+const emojis = require('./emojis.js');
+const menus = require('./menus.js');
 const fetch = require('node-fetch');
 
 // Create a new client instance
@@ -65,15 +67,85 @@ client.on('interactionCreate', async interaction => {
 				});
 				break;
 			}
+			case 'menu': {
+				await interaction.reply({
+					embeds: [
+						menus.MENU,
+					],
+					components: [menus.MENU_CATEGORY],
+					ephemeral: true,
+				});
+				break;
+			}
 			default:
 				await interaction.reply({ content: 'That command isn\'t working right now or isn\'t set up yet. Check back later?', ephemeral: true });
 		}
 	}
 	else if (interaction.isButton()) {
-		// button stuff here
+		const { customId } = interaction;
+
+		switch (customId) {
+			case 'menu': {
+				await interaction.update({
+					embeds: [
+						menus.MENU,
+					],
+					components: [menus.MENU_CATEGORY],
+					ephemeral: true,
+				});
+				break;
+			}
+		}
 	}
-	else if (interaction.isContextMenu()) {
-		// context menu stuff here
+	else if (interaction.isSelectMenu()) {
+		const { customId } = interaction;
+
+		switch (customId) {
+			case 'menu_category': {
+				const { user } = interaction;
+
+				switch (interaction.values[0]) {
+					case 'profile': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Profile')
+									.setDescription(`**${user.tag}**${managerIds.includes(user.id) ? ` <:verified:${emojis.VERIFIED}>` : ''}`)
+									.setThumbnail(user.avatarURL)
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+					case 'job': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Job')
+									.setDescription('You\'re unemployed.')
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+					case 'bank': {
+						await interaction.update({
+							embeds: [
+								new MessageEmbed()
+									.setTitle('Bank')
+									.setDescription('You\'re broke.')
+									.setColor('BLURPLE'),
+							],
+							components: [menus.MENU_BACK],
+						});
+						break;
+					}
+				}
+				break;
+			}
+		}
 	}
 });
 
