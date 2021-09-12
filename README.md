@@ -20,6 +20,7 @@ After installation of dependencies, make a copy of `config.example.json` and ren
 
 `guildId` - The ID of your development guild. (Optional, only required if `global` is set to `false`)
 
+`managerIds` - The User ID(s) of the manager(s). (Optional)
 `token` - The token of your application.
 
 `global` - Whether or not to register slash commands globally when running `deploy-commands`.
