@@ -59,7 +59,6 @@ client.on('interactionCreate', async interaction => {
 								.setDescription(`Your invite link is https://discord.com/invite/${invite.code}`)
 								.setColor('BLURPLE'),
 						],
-						fetchReply: true,
 					});
 				}
 				else {
