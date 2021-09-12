@@ -110,7 +110,7 @@ client.on('interactionCreate', async interaction => {
 								new MessageEmbed()
 									.setTitle('Profile')
 									.setDescription(`**${user.tag}**${managerIds.includes(user.id) ? ` <:verified:${emojis.VERIFIED}>` : ''}`)
-									.setThumbnail(user.avatarURL)
+									.setThumbnail(user.avatarURL({ dynamic: true }))
 									.setColor('BLURPLE'),
 							],
 							components: [menus.MENU_BACK],
