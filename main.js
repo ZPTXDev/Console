@@ -17,13 +17,13 @@ client.once('ready', () => {
 	console.log(`Logged in to ${client.user.tag}!`);
 });
 
-function badges(user) {
+function badges(user, names) {
 	const badgeList = [];
 	const staffEntry = staffIds.find(staff => staff.id === user.id);
 	if (staffEntry) {
-		if (staffEntry.staff) {badgeList.push(`<:staff:${emojis.STAFF}>`);}
-		if (staffEntry.verified) {badgeList.push(`<:verified:${emojis.VERIFIED}>`);}
-		if (staffEntry.tester) {badgeList.push(`<:tester:${emojis.TESTER}>`);}
+		if (staffEntry.staff) {badgeList.push(`<:staff:${emojis.STAFF}>${names ? ' **Staff**' : ''}`);}
+		if (staffEntry.verified) {badgeList.push(`<:verified:${emojis.VERIFIED}>${names ? ' **Verified**' : ''}`);}
+		if (staffEntry.tester) {badgeList.push(`<:tester:${emojis.TESTER}>${names ? ' **Tester**' : ''}`);}
 	}
 	return badgeList;
 }
@@ -116,11 +116,21 @@ client.on('interactionCreate', async interaction => {
 
 				switch (interaction.values[0]) {
 					case 'profile': {
+						const fields = [];
+						if (badges(user).length > 0) {
+							fields.push({
+								name: 'Badges',
+								value: `${badges(user).length > 0 ? `${badges(user, true).join('\n')}` : ''}`,
+							});
+						}
 						await interaction.update({
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Profile')
-									.setDescription(`**${user.tag}**${badges(user).length > 0 ? ` ${badges(user).join('')}` : ''}`)
+									.setDescription(`
+										**${user.tag}**${badges(user).length > 0 ? ` ${badges(user).join('')}` : ''}
+									`)
+									.setFields(fields)
 									.setThumbnail(user.avatarURL({ dynamic: true }))
 									.setColor('BLURPLE'),
 							],
