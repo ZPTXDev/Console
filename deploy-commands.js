@@ -30,14 +30,7 @@ const commands = [
 				.setRequired(true)),
 	new SlashCommandBuilder()
 		.setName('menu')
-		.setDescription('Display the interaction menu.')
-		.addStringOption(option =>
-			option
-				.setName('category')
-				.setDescription('The category of the interaction menu to display.')
-				.addChoice('Profile', 'profile')
-				.addChoice('Job', 'job')
-				.addChoice('Bank', 'bank')),
+		.setDescription('Display the interaction menu.'),
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '9' }).setToken(token);
