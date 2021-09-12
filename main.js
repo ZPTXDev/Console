@@ -1,8 +1,12 @@
 // Require the necessary discord.js classes
 const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
+
+// Require external files
 const { token, managerIds } = require('./config.json');
 const emojis = require('./emojis.js');
 const menus = require('./menus.js');
+
+// Require dependencies
 const fetch = require('node-fetch');
 
 // Create a new client instance
