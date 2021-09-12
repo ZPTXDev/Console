@@ -1,7 +1,15 @@
 {
     "clientId": "",
 	"guildId": "",
-    "managerIds": [""],
+    "staffIds": [
+        {
+            "id": "",
+            "manager": true,
+            "staff": true,
+            "verified": true,
+            "tester": true
+        }
+    ],
 	"token": "",
     "global": true
 }
