@@ -2,7 +2,7 @@
 const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
 
 // Require external files
-const { token, managerIds } = require('./config.json');
+const { token, staffIds } = require('./config.json');
 const emojis = require('./emojis.js');
 const menus = require('./menus.js');
 
@@ -16,6 +16,17 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 client.once('ready', () => {
 	console.log(`Logged in to ${client.user.tag}!`);
 });
+
+function badges(user) {
+	const badgeList = [];
+	const staffEntry = staffIds.find(staff => staff.id === user.id);
+	if (staffEntry) {
+		if (staffEntry.staff) {badgeList.push(`<:staff:${emojis.STAFF}>`);}
+		if (staffEntry.verified) {badgeList.push(`<:verified:${emojis.VERIFIED}>`);}
+		if (staffEntry.tester) {badgeList.push(`<:tester:${emojis.TESTER}>`);}
+	}
+	return badgeList;
+}
 
 client.on('interactionCreate', async interaction => {
 	if (interaction.isCommand()) {
@@ -109,7 +120,7 @@ client.on('interactionCreate', async interaction => {
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Profile')
-									.setDescription(`**${user.tag}**${managerIds.includes(user.id) ? ` <:staff:${emojis.STAFF}><:verified:${emojis.VERIFIED}>` : ''}`)
+									.setDescription(`**${user.tag}**${badges(user).length > 0 ? ` ${badges(user).join('')}` : ''}`)
 									.setThumbnail(user.avatarURL({ dynamic: true }))
 									.setColor('BLURPLE'),
 							],
