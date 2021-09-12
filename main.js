@@ -69,9 +69,7 @@ client.on('interactionCreate', async interaction => {
 			}
 			case 'menu': {
 				await interaction.reply({
-					embeds: [
-						menus.MENU,
-					],
+					embeds: [menus.MENU],
 					components: [menus.MENU_CATEGORY],
 					ephemeral: true,
 				});
@@ -87,9 +85,7 @@ client.on('interactionCreate', async interaction => {
 		switch (customId) {
 			case 'menu_back': {
 				await interaction.update({
-					embeds: [
-						menus.MENU,
-					],
+					embeds: [menus.MENU],
 					components: [menus.MENU_CATEGORY],
 				});
 				break;
