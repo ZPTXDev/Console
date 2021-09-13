@@ -29,12 +29,12 @@ module.exports = {
 		},
 		energy: {
 			type: INTEGER,
-			defaultValue: 0,
+			defaultValue: 5,
 			allowNull: false,
 		},
 		energyCap: {
 			type: INTEGER,
-			defaultValue: 0,
+			defaultValue: 5,
 			allowNull: false,
 		},
 		experience: {
