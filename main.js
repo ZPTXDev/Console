@@ -63,13 +63,45 @@ const Job = sequelize.define('job', {
 		allowNull: false,
 	},
 });
+const Transaction = sequelize.define('transaction', {
+	id: {
+		type: Sequelize.UUID,
+		defaultValue: Sequelize.UUIDV4,
+		allowNull: false,
+		unique: true,
+		primaryKey: true,
+	},
+	walletBefore: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+	walletAfter: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+	bankBefore: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+	bankAfter: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+	reason: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+	},
+});
 Users.belongsTo(Job);
 Job.hasMany(Users);
+Transaction.belongsTo(Users);
+Users.hasMany(Transaction);
 
 // When the client is ready, run this code (only once)
-client.once('ready', () => {
+client.once('ready', async () => {
 	Users.sync();
 	Job.sync();
+	Transaction.sync();
 	console.log(`Logged in to ${client.user.tag}!`);
 });
 
