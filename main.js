@@ -166,7 +166,7 @@ client.on('interactionCreate', async interaction => {
 			case 'register_create': {
 				try {
 					await Users.create({ id: interaction.user.id });
-					await interaction.update({ embeds: embeds.REGISTER_SUCCESS, components: [] });
+					await interaction.update({ embeds: embeds.REGISTER_SUCCESS, components: components.REGISTER_SUCCESS });
 				}
 				catch (err) {
 					console.log(err);
