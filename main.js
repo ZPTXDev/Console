@@ -4,7 +4,8 @@ const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
 // Require external files
 const { token, staffIds } = require('./config.json');
 const emojis = require('./emojis.js');
-const menus = require('./menus.js');
+const embeds = require('./embeds.js');
+const components = require('./components.js');
 
 // Require dependencies
 const fetch = require('node-fetch');
@@ -84,8 +85,8 @@ client.on('interactionCreate', async interaction => {
 			}
 			case 'menu': {
 				await interaction.reply({
-					embeds: [menus.MENU],
-					components: [menus.MENU_CATEGORY],
+						embeds: embeds.MENU,
+						components: components.MENU,
 					ephemeral: true,
 				});
 				break;
@@ -99,10 +100,9 @@ client.on('interactionCreate', async interaction => {
 
 		switch (customId) {
 			case 'menu_back': {
-				await interaction.update({
-					embeds: [menus.MENU],
-					components: [menus.MENU_CATEGORY],
-				});
+				await interaction.update({ embeds: embeds.MENU, components: components.MENU });
+				break;
+			}
 				break;
 			}
 		}
@@ -134,7 +134,7 @@ client.on('interactionCreate', async interaction => {
 									.setThumbnail(user.avatarURL({ dynamic: true }))
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_PROFILE,
 						});
 						break;
 					}
@@ -146,7 +146,7 @@ client.on('interactionCreate', async interaction => {
 									.setDescription('You\'re unemployed.')
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_JOB_WITHJOB,
 						});
 						break;
 					}
@@ -158,7 +158,7 @@ client.on('interactionCreate', async interaction => {
 									.setDescription('You\'re broke.')
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_BANK,
 						});
 						break;
 					}
