@@ -20,7 +20,7 @@ After installation of dependencies, make a copy of `config.example.json` and ren
 
 `guildId` - The ID of your development guild. (Optional, only required if `global` is set to `false`)
 
-`managerIds` - The User ID(s) of the manager(s). (Optional)
+`staffIds` - The User ID(s) to be granted escalated privileges (by the `manager` property) and badges (by all other properties) (Recommended)
 
 `token` - The token of your application.
 
