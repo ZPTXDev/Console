@@ -257,6 +257,12 @@ client.on('interactionCreate', async interaction => {
 				await interaction.update({ embeds: embeds.MENU_PROFILE_DELETE, components: components.MENU_PROFILE_DELETE });
 				break;
 			}
+			case 'menu_job_resign': {
+				const user = await Users.findOne({ where: { id: interaction.user.id } });
+				await user.setJob(null);
+				await interaction.update({ embeds: embeds.MENU, components: components.MENU });
+				break;
+			}
 			case 'profile_delete': {
 				await Users.destroy({ where: { id: interaction.user.id } });
 				await interaction.update({ embeds: embeds.PROFILE_DELETED, components: [] });
@@ -360,6 +366,16 @@ client.on('interactionCreate', async interaction => {
 						break;
 					}
 				}
+				break;
+			}
+			case 'menu_job_listings_choice': {
+				const dbUser = await Users.findOne({ where: { id: interaction.user.id } });
+				if (!dbUser) {
+					await interaction.update({ embeds: embeds.REGISTER, components: components.REGISTER });
+					break;
+				}
+				await dbUser.setJob(interaction.values[0]);
+				await interaction.update({ embeds: embeds.MENU, components: components.MENU });
 				break;
 			}
 		}
