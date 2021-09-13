@@ -105,4 +105,13 @@ module.exports = {
 					.setStyle('SECONDARY'),
 			),
 	],
+	MENU_JOB_LISTINGS: [
+		new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('menu_back')
+					.setLabel('Back')
+					.setStyle('SECONDARY'),
+			),
+	],
 };
