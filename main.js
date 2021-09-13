@@ -4,16 +4,72 @@ const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
 // Require external files
 const { token, staffIds } = require('./config.json');
 const emojis = require('./emojis.js');
-const menus = require('./menus.js');
+const embeds = require('./embeds.js');
+const components = require('./components.js');
 
 // Require dependencies
 const fetch = require('node-fetch');
+const Sequelize = require('sequelize');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+const sequelize = new Sequelize('database', 'user', 'password', {
+	host: 'localhost',
+	dialect: 'sqlite',
+	logging: false,
+	storage: 'database.sqlite',
+});
+const Users = sequelize.define('users', {
+	id: {
+		type: Sequelize.STRING,
+		unique: true,
+		primaryKey: true,
+	},
+	wallet: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0,
+		allowNull: false,
+	},
+	bank: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0,
+		allowNull: false,
+	},
+	jobPoints: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0,
+		allowNull: false,
+	},
+});
+const Job = sequelize.define('job', {
+	id: {
+		type: Sequelize.UUID,
+		defaultValue: Sequelize.UUIDV4,
+		allowNull: false,
+		unique: true,
+		primaryKey: true,
+	},
+	name: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+	},
+	requiredJobPoints: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+	baseSalary: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
+});
+Users.belongsTo(Job);
+Job.hasMany(Users);
+
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
+	Users.sync();
+	Job.sync();
 	console.log(`Logged in to ${client.user.tag}!`);
 });
 
@@ -83,9 +139,18 @@ client.on('interactionCreate', async interaction => {
 				break;
 			}
 			case 'menu': {
+				const user = await Users.findOne({ where: { id: interaction.user.id } });
+				if (user) {
+					await interaction.reply({
+						embeds: embeds.MENU,
+						components: components.MENU,
+						ephemeral: true,
+					});
+					break;
+				}
 				await interaction.reply({
-					embeds: [menus.MENU],
-					components: [menus.MENU_CATEGORY],
+					embeds: embeds.REGISTER,
+					components: components.REGISTER,
 					ephemeral: true,
 				});
 				break;
@@ -98,11 +163,32 @@ client.on('interactionCreate', async interaction => {
 		const { customId } = interaction;
 
 		switch (customId) {
+			case 'register_create': {
+				try {
+					await Users.create({ id: interaction.user.id });
+					await interaction.update({ embeds: embeds.REGISTER_SUCCESS, components: components.REGISTER_SUCCESS });
+				}
+				catch (err) {
+					console.log(err);
+					await interaction.update({ embeds: embeds.REGISTER_FAILURE, components: [] });
+				}
+				break;
+			}
 			case 'menu_back': {
-				await interaction.update({
-					embeds: [menus.MENU],
-					components: [menus.MENU_CATEGORY],
-				});
+				await interaction.update({ embeds: embeds.MENU, components: components.MENU });
+				break;
+			}
+			case 'menu_job_listings': {
+				// const user = await Users.findOne({ where: { id: interaction.user.id } });
+				break;
+			}
+			case 'menu_profile_delete': {
+				await interaction.update({ embeds: embeds.MENU_PROFILE_DELETE, components: components.MENU_PROFILE_DELETE });
+				break;
+			}
+			case 'profile_delete': {
+				await Users.destroy({ where: { id: interaction.user.id } });
+				await interaction.update({ embeds: embeds.PROFILE_DELETED, components: [] });
 				break;
 			}
 		}
@@ -134,31 +220,71 @@ client.on('interactionCreate', async interaction => {
 									.setThumbnail(user.avatarURL({ dynamic: true }))
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_PROFILE,
 						});
 						break;
 					}
 					case 'job': {
+						const dbUser = await Users.findOne({ where: { id: interaction.user.id }, include: Job });
+						if (!dbUser) {
+							await interaction.update({ embeds: embeds.REGISTER, components: components.REGISTER });
+							break;
+						}
+						if (!dbUser.jobId) {
+							await interaction.update({
+								embeds: [
+									new MessageEmbed()
+										.setTitle('Job')
+										.setDescription('You are currently unemployed.')
+										.setColor('BLURPLE'),
+								],
+								components: components.MENU_JOB_NOJOB,
+							});
+							break;
+						}
 						await interaction.update({
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Job')
-									.setDescription('You\'re unemployed.')
+									.setDescription(`You are currently employed with **${dbUser.job.name}**.`)
+									.setFields([
+										{
+											name: 'Salary',
+											value: `$${dbUser.job.baseSalary}`,
+										},
+									])
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_JOB_WITHJOB,
 						});
 						break;
 					}
 					case 'bank': {
+						const dbUser = await Users.findOne({ where: { id: interaction.user.id } });
+						if (!dbUser) {
+							await interaction.update({ embeds: embeds.REGISTER, components: components.REGISTER });
+							break;
+						}
 						await interaction.update({
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Bank')
-									.setDescription('You\'re broke.')
+									.setDescription('Use the /deposit and /withdraw commands to transfer funds between your Wallet and Bank.')
+									.setFields([
+										{
+											name: 'Wallet',
+											value: `$${dbUser.wallet}`,
+											inline: true,
+										},
+										{
+											name: 'Bank',
+											value: `$${dbUser.bank}`,
+											inline: true,
+										},
+									])
 									.setColor('BLURPLE'),
 							],
-							components: [menus.MENU_BACK],
+							components: components.MENU_BANK,
 						});
 						break;
 					}

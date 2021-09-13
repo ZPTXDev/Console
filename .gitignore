@@ -109,3 +109,6 @@ dist
 
 # Settings
 config.json
+
+# SQLite Database
+database.sqlite
