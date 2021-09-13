@@ -274,10 +274,12 @@ client.on('interactionCreate', async interaction => {
 										{
 											name: 'Wallet',
 											value: `$${dbUser.wallet}`,
+											inline: true,
 										},
 										{
 											name: 'Bank',
 											value: `$${dbUser.bank}`,
+											inline: true,
 										},
 									])
 									.setColor('BLURPLE'),
