@@ -323,7 +323,7 @@ client.on('interactionCreate', async interaction => {
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Job')
-									.setDescription(`You are currently employed with **${dbUser.job.name}**.`)
+									.setDescription(`You are currently employed as a **${dbUser.job.name}**.`)
 									.setFields([
 										{
 											name: 'Salary',
