@@ -269,7 +269,7 @@ client.on('interactionCreate', async interaction => {
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Bank')
-									.setDescription('You can transfer funds between your Wallet and Bank using the /transfer command.')
+									.setDescription('Use the /deposit and /withdraw commands to transfer funds between your Wallet and Bank.')
 									.setFields([
 										{
 											name: 'Wallet',
