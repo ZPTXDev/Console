@@ -6,6 +6,7 @@ const { token, staffIds } = require('./config.json');
 const emojis = require('./emojis.js');
 const embeds = require('./embeds.js');
 const components = require('./components.js');
+const models = require('./models.js');
 
 // Require dependencies
 const fetch = require('node-fetch');
@@ -20,78 +21,11 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 	logging: false,
 	storage: 'database.sqlite',
 });
-const Users = sequelize.define('users', {
-	id: {
-		type: Sequelize.STRING,
-		unique: true,
-		primaryKey: true,
-	},
-	wallet: {
-		type: Sequelize.INTEGER,
-		defaultValue: 0,
-		allowNull: false,
-	},
-	bank: {
-		type: Sequelize.INTEGER,
-		defaultValue: 0,
-		allowNull: false,
-	},
-	jobPoints: {
-		type: Sequelize.INTEGER,
-		defaultValue: 0,
-		allowNull: false,
-	},
-});
-const Job = sequelize.define('job', {
-	id: {
-		type: Sequelize.UUID,
-		defaultValue: Sequelize.UUIDV4,
-		allowNull: false,
-		unique: true,
-		primaryKey: true,
-	},
-	name: {
-		type: Sequelize.TEXT,
-		allowNull: false,
-	},
-	requiredJobPoints: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-	baseSalary: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-});
-const Transaction = sequelize.define('transaction', {
-	id: {
-		type: Sequelize.UUID,
-		defaultValue: Sequelize.UUIDV4,
-		allowNull: false,
-		unique: true,
-		primaryKey: true,
-	},
-	walletBefore: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-	walletAfter: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-	bankBefore: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-	bankAfter: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-	},
-	reason: {
-		type: Sequelize.TEXT,
-		allowNull: false,
-	},
-});
+
+const Users = sequelize.define('users', models.Users);
+const Job = sequelize.define('job', models.Job);
+const Transaction = sequelize.define('transaction', models.Transaction);
+
 Users.belongsTo(Job);
 Job.hasMany(Users);
 Transaction.belongsTo(Users);
