@@ -236,7 +236,7 @@ client.on('interactionCreate', async interaction => {
 						new MessageActionRow()
 							.addComponents(
 								new MessageSelectMenu()
-									.setCustomId('menu_job_listing_choice')
+									.setCustomId('menu_job_listings_choice')
 									.setPlaceholder('Pick a job')
 									.addOptions(
 										jobs.map(job => {
