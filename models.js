@@ -1,4 +1,4 @@
-const { STRING, INTEGER, TEXT, UUID, UUIDV4 } = require('sequelize');
+const { STRING, INTEGER, TEXT, FLOAT, UUID, UUIDV4 } = require('sequelize');
 
 module.exports = {
 	Users: {
@@ -22,6 +22,26 @@ module.exports = {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		timesWorked: {
+			type: INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		energy: {
+			type: INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		energyCap: {
+			type: INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		experience: {
+			type: FLOAT,
+			defaultValue: 0.00,
+			allowNull: false,
+		},
 	},
 	Job: {
 		id: {
@@ -36,6 +56,10 @@ module.exports = {
 			allowNull: false,
 		},
 		requiredJobPoints: {
+			type: INTEGER,
+			allowNull: false,
+		},
+		workQuota: {
 			type: INTEGER,
 			allowNull: false,
 		},
