@@ -1,14 +1,17 @@
 const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 
 module.exports = {
-	REGISTER: new MessageActionRow()
+	REGISTER: [
+		new MessageActionRow()
 		.addComponents(
 			new MessageButton()
 				.setCustomId('register_create')
 				.setLabel('Create')
 				.setStyle('SUCCESS'),
 		),
-	MENU: new MessageActionRow()
+	],
+	MENU: [
+		new MessageActionRow()
 		.addComponents(
 			new MessageSelectMenu()
 				.setCustomId('menu_category')
@@ -31,14 +34,18 @@ module.exports = {
 					},
 				]),
 		),
-	MENU_BANK: new MessageActionRow()
+	],
+	MENU_BANK: [
+		new MessageActionRow()
 		.addComponents(
 			new MessageButton()
 				.setCustomId('menu_back')
 				.setLabel('Back')
 				.setStyle('SECONDARY'),
 		),
-	MENU_PROFILE: new MessageActionRow()
+	],
+	MENU_PROFILE: [
+		new MessageActionRow()
 		.addComponents(
 			new MessageButton()
 				.setCustomId('menu_profile_delete')
@@ -49,7 +56,9 @@ module.exports = {
 				.setLabel('Back')
 				.setStyle('SECONDARY'),
 		),
-	MENU_JOB: new MessageActionRow()
+	],
+	MENU_JOB_NOJOB: [
+		new MessageActionRow()
 		.addComponents(
 			new MessageButton()
 				.setCustomId('menu_job_listings')
@@ -60,4 +69,5 @@ module.exports = {
 				.setLabel('Back')
 				.setStyle('SECONDARY'),
 		),
+	],
 };
