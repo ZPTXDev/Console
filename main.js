@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Intents, MessageEmbed, VoiceChannel } = require('discord.js');
+const { Client, Intents, MessageEmbed, VoiceChannel, MessageActionRow, MessageSelectMenu } = require('discord.js');
 
 // Require external files
 const { token, staffIds } = require('./config.json');
@@ -211,7 +211,46 @@ client.on('interactionCreate', async interaction => {
 				break;
 			}
 			case 'menu_job_listings': {
-				// const user = await Users.findOne({ where: { id: interaction.user.id } });
+				const user = await Users.findOne({ where: { id: interaction.user.id } });
+				const jobs = await Job.findAll({ where: { requiredJobPoints: { [Sequelize.Op.lte]: user.jobPoints } } });
+				if (jobs.length === 0) {
+					await interaction.update({
+						embeds: [
+							new MessageEmbed()
+								.setTitle('Job Listings')
+								.setDescription('You are not eligible for any jobs at this time.\nTry increasing your job points.')
+								.setColor('BLURPLE'),
+						],
+						components: components.MENU_JOB_LISTINGS,
+					});
+					break;
+				}
+				await interaction.update({
+					embeds: [
+						new MessageEmbed()
+							.setTitle('Job Listings')
+							.setDescription('You are eligible for the jobs in the menu below.')
+							.setColor('BLURPLE'),
+					],
+					components: [
+						new MessageActionRow()
+							.addComponents(
+								new MessageSelectMenu()
+									.setCustomId('menu_job_listing_choice')
+									.setPlaceholder('Pick a job')
+									.addOptions(
+										jobs.map(job => {
+											return {
+												label: job.name,
+												description: `Salary: $${job.baseSalary} | Job Points Required: ${job.requiredJobPoints}`,
+												value: job.id,
+											};
+										}),
+									),
+							),
+						...components.MENU_JOB_LISTINGS,
+					],
+				});
 				break;
 			}
 			case 'menu_profile_delete': {
