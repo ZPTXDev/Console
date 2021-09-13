@@ -10,6 +10,15 @@ module.exports = {
 					.setStyle('SUCCESS'),
 			),
 	],
+	REGISTER_SUCCESS: [
+		new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('menu_back')
+					.setLabel('Continue')
+					.setStyle('PRIMARY'),
+			),
+	],
 	MENU: [
 		new MessageActionRow()
 			.addComponents(
