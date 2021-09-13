@@ -34,11 +34,11 @@ Users.hasMany(Transaction);
 // When the client is ready, run this code (only once)
 client.once('ready', async () => {
 	// Syncing tables
+	console.log('Syncing with database...');
 	await Users.sync();
 	await Job.sync();
 	await Transaction.sync();
 
-	// Logging to console
 	console.log(`Logged in to ${client.user.tag}!`);
 });
 
