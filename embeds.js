@@ -25,6 +25,12 @@ module.exports = {
 			.setDescription('Choose an option below to continue.')
 			.setColor('BLURPLE'),
 	],
+	MENU_JOB_NOJOB: [
+		new MessageEmbed()
+			.setTitle('Job')
+			.setDescription('You are currently unemployed.')
+			.setColor('BLURPLE'),
+	],
 	MENU_PROFILE_DELETE: [
 		new MessageEmbed()
 			.setTitle('Delete Profile')
