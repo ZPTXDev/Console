@@ -216,6 +216,11 @@ client.on('interactionCreate', async interaction => {
 
 				switch (interaction.values[0]) {
 					case 'profile': {
+						const dbUser = await Users.findOne({ where: { id: interaction.user.id }, include: Job });
+						if (!dbUser) {
+							await interaction.update({ embeds: embeds.REGISTER, components: components.REGISTER });
+							break;
+						}
 						const fields = [];
 						if (badges(user).length > 0) {
 							fields.push({
@@ -223,6 +228,10 @@ client.on('interactionCreate', async interaction => {
 								value: `${badges(user).length > 0 ? `${badges(user, true).join('\n')}` : ''}`,
 							});
 						}
+						fields.push({
+							name: 'Energy',
+							value: `**${dbUser.energy}** / **${dbUser.energyCap}**`,
+						});
 						await interaction.update({
 							embeds: [
 								new MessageEmbed()
@@ -245,15 +254,7 @@ client.on('interactionCreate', async interaction => {
 							break;
 						}
 						if (!dbUser.jobId) {
-							await interaction.update({
-								embeds: [
-									new MessageEmbed()
-										.setTitle('Job')
-										.setDescription('You are currently unemployed.')
-										.setColor('BLURPLE'),
-								],
-								components: components.MENU_JOB_NOJOB,
-							});
+							await interaction.update({ embeds: embeds.MENU_JOB_NOJOB, components: components.MENU_JOB_NOJOB });
 							break;
 						}
 						await interaction.update({
@@ -263,8 +264,18 @@ client.on('interactionCreate', async interaction => {
 									.setDescription(`You are currently employed as a **${dbUser.job.name}**.`)
 									.setFields([
 										{
+											name: 'Your Job Points',
+											value: `${dbUser.jobPoints}`,
+										},
+										{
+											name: 'Work Quota',
+											value: `**${dbUser.timesWorked}** / **${dbUser.job.workQuota}**`,
+											inline: true,
+										},
+										{
 											name: 'Salary',
 											value: `$${dbUser.job.baseSalary}`,
+											inline: true,
 										},
 									])
 									.setColor('BLURPLE'),
@@ -283,7 +294,6 @@ client.on('interactionCreate', async interaction => {
 							embeds: [
 								new MessageEmbed()
 									.setTitle('Bank')
-									.setDescription('Use the /deposit and /withdraw commands to transfer funds between your Wallet and Bank.')
 									.setFields([
 										{
 											name: 'Wallet',
@@ -296,6 +306,7 @@ client.on('interactionCreate', async interaction => {
 											inline: true,
 										},
 									])
+									.setFooter('Use the /deposit and /withdraw commands to transfer funds between your Wallet and Bank.')
 									.setColor('BLURPLE'),
 							],
 							components: components.MENU_BANK,
