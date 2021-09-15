@@ -12,7 +12,7 @@ A fun and games bot.
 
 Before running the bot, run `npm ci` to install dependencies.
 
-After installation of dependencies, make a copy of `config.example.json` and rename it to `config.json`.
+After installation of dependencies, make a copy of `config.example.json`, naming it `config.json`.
 
 ### <a name="configuration"></a>Configuration
 
